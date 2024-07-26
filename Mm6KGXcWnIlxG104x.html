@@ -1,0 +1,489 @@
+<!DOCTYPE html><html><head><base href="https://creedmusicplayer.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creed Online Music Player - Phone Directory</title>
+<style>
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #1c2331, #4a5568);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+  }
+  .player {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .player:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  }
+  .album-art {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto 30px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+  .album-art:hover {
+    transform: scale(1.05);
+  }
+  .album-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+  }
+  .album-art:hover img {
+    filter: brightness(1.2);
+  }
+  .song-info {
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+  }
+  .song-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  .album-name {
+    font-size: 18px;
+    opacity: 0.8;
+    font-style: italic;
+  }
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    position: relative;
+    z-index: 1;
+  }
+  .control-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+  }
+  .control-btn:hover {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  .play-pause {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  .play-pause:hover {
+    background: linear-gradient(135deg, #764ba2, #667eea);
+  }
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    margin-top: 30px;
+    border-radius: 3px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+  }
+  .progress {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.1s linear;
+  }
+  .glass-background {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    transform: rotate(45deg);
+    z-index: 0;
+    animation: glassAnimation 20s linear infinite;
+  }
+  @keyframes glassAnimation {
+    0% {
+      transform: rotate(45deg) translate(-50%, -50%);
+    }
+    100% {
+      transform: rotate(405deg) translate(-50%, -50%);
+    }
+  }
+  .emoji-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 100px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .emoji-container:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  @keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  .emoji-container.spinning {
+    animation: spin 1s linear infinite;
+  }
+</style>
+</head>
+<body>
+  <div class="player">
+  <div class="album-art">
+    <div style="font-size: 200px; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; background-color: #FF8C00; border-radius: 50%; overflow: hidden;">
+      <div style="position: relative; width: 100%; height: 100%;">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+          <circle cx="50" cy="50" r="40" fill="none" stroke="white" stroke-width="5">
+            <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite"></animateTransform>
+          </circle>
+          <text x="50" y="50" font-size="20" text-anchor="middle" dominant-baseline="central" fill="white">360</text>
+        </svg>
+        <div id="emoji-container" class="emoji-container">
+          🎵
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="song-info">
+    <div class="song-title" id="songTitle">No song selected</div>
+    <div class="album-name" id="albumName"></div>
+  </div>
+  <div class="time-display">
+    <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+  </div>
+  <div class="controls">
+    <button class="control-btn" id="prev" style="color: #ffd700;">⏮️</button>
+    <button class="control-btn" id="back30" style="color: #ffd700;">⏪</button>
+    <button class="control-btn play-pause" id="playPause" style="background: linear-gradient(135deg, #ffd700, #ff8c00);">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+      </svg>
+    </button>
+    <button class="control-btn" id="forward30" style="color: #ffd700;">⏩</button>
+    <button class="control-btn" id="next" style="color: #ffd700;">⏭️</button>
+  </div>
+  <div class="progress-bar">
+    <input type="range" id="seekBar" min="0" max="100" value="0" step="0.1">
+    <div class="progress" id="progress"></div>
+  </div>
+  <div class="glass-background"></div>
+</div>
+
+  <div class="playlist">
+  <h2>Your Music Library</h2>
+  <label for="fileInput" class="file-input-label">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="17 8 12 3 7 8"></polyline>
+      <line x1="12" y1="3" x2="12" y2="15"></line>
+    </svg>
+    Add Music Files
+  </label>
+  <input type="file" id="fileInput" accept="audio/*" multiple="" style="display: none;">
+  <div id="playlistContainer" class="playlist-container"></div>
+  <style>
+    .playlist {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 100%;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+    }
+    .playlist h2 {
+      color: #ffd700;
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      color: #fff;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+    .file-input-label:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+    }
+    .file-input-label svg {
+      margin-right: 10px;
+    }
+    .playlist-container {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      border-radius: 10px;
+      padding: 10px;
+    }
+    .playlist-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .playlist-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+    .playlist-item.active {
+      background: rgba(255, 215, 0, 0.2);
+      border-left: 4px solid #ffd700;
+    }
+    .playlist-item-title {
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+    .playlist-item-album {
+      font-size: 0.9em;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    /* Customizing scrollbar */
+    .playlist-container::-webkit-scrollbar {
+      width: 8px;
+    }
+    .playlist-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+    .playlist-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 215, 0, 0.5);
+      border-radius: 4px;
+    }
+    .playlist-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 215, 0, 0.7);
+    }
+  </style>
+</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+  <script>
+    const playPauseBtn = document.getElementById('playPause');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const back30Btn = document.getElementById('back30');
+    const forward30Btn = document.getElementById('forward30');
+    const progress = document.getElementById('progress');
+    const seekBar = document.getElementById('seekBar');
+    const fileInput = document.getElementById('fileInput');
+    const playlistContainer = document.getElementById('playlistContainer');
+    const songTitle = document.getElementById('songTitle');
+    const albumName = document.getElementById('albumName');
+    const currentTimeElement = document.getElementById('currentTime');
+    const totalTimeElement = document.getElementById('totalTime');
+    const emojiContainer = document.getElementById('emoji-container');
+
+    let playlist = [];
+    let currentTrack = 0;
+    let sound;
+
+    const emojis = ['🎵', '🎶', '🎸', '🥁', '🎹', '🎷', '🎺', '🎻', '🪕', '🎤'];
+    let currentEmojiIndex = 0;
+
+    function loadTrack(index) {
+      if (sound) {
+        sound.unload();
+      }
+
+      const track = playlist[index];
+      songTitle.textContent = track.title || 'Unknown Title';
+      albumName.textContent = track.album || 'Unknown Album';
+
+      sound = new Howl({
+        src: [track.file],
+        html5: true,
+        format: ['mp3', 'wav', 'ogg', 'aac', 'flac'],
+        onplay: () => {
+          requestAnimationFrame(step);
+        },
+        onend: () => {
+          nextTrack();
+        },
+        onload: () => {
+          totalTimeElement.textContent = formatTime(sound.duration());
+        }
+      });
+
+      playPauseBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+      updateActiveTrack();
+    }
+
+    function togglePlayPause() {
+      if (!sound) return;
+      if (!sound.playing()) {
+        sound.play();
+        playPauseBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+      } else {
+        sound.pause();
+        playPauseBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+      }
+    }
+
+    function nextTrack() {
+      currentTrack = (currentTrack + 1) % playlist.length;
+      loadTrack(currentTrack);
+      sound.play();
+    }
+
+    function prevTrack() {
+      currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+      loadTrack(currentTrack);
+      sound.play();
+    }
+
+    function step() {
+      if (sound) {
+        const seek = sound.seek() || 0;
+        progress.style.width = ((seek / sound.duration()) * 100 || 0) + '%';
+        seekBar.value = (seek / sound.duration()) * 100 || 0;
+        currentTimeElement.textContent = formatTime(seek);
+        if (sound.playing()) {
+          requestAnimationFrame(step);
+        }
+      }
+    }
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = Math.floor(seconds % 60);
+      return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    }
+
+    function updatePlaylist() {
+      playlistContainer.innerHTML = '';
+      playlist.forEach((track, index) => {
+        const playlistItem = document.createElement('div');
+        playlistItem.classList.add('playlist-item');
+        if (index === currentTrack) {
+          playlistItem.classList.add('active');
+        }
+        playlistItem.innerHTML = `
+          <div class="playlist-item-info">
+            <div class="playlist-item-title">${track.title || 'Unknown Title'}</div>
+            <div class="playlist-item-album">${track.album || 'Unknown Album'}</div>
+          </div>
+        `;
+        playlistItem.addEventListener('click', () => {
+          currentTrack = index;
+          loadTrack(currentTrack);
+          sound.play();
+        });
+        playlistContainer.appendChild(playlistItem);
+      });
+    }
+
+    function updateActiveTrack() {
+      const playlistItems = document.querySelectorAll('.playlist-item');
+      playlistItems.forEach((item, index) => {
+        if (index === currentTrack) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+    fileInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files);
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const track = {
+            file: event.target.result,
+            title: file.name.replace(/\.[^/.]+$/, ""),
+            album: 'Unknown Album'
+          };
+          playlist.push(track);
+          updatePlaylist();
+          if (playlist.length === 1) {
+            loadTrack(0);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    playPauseBtn.addEventListener('click', togglePlayPause);
+    nextBtn.addEventListener('click', nextTrack);
+    prevBtn.addEventListener('click', prevTrack);
+    back30Btn.addEventListener('click', () => {
+      if (sound) {
+        sound.seek(Math.max(0, sound.seek() - 30));
+      }
+    });
+    forward30Btn.addEventListener('click', () => {
+      if (sound) {
+        sound.seek(Math.min(sound.duration(), sound.seek() + 30));
+      }
+    });
+
+    seekBar.addEventListener('input', () => {
+      if (sound) {
+        const seekTime = (seekBar.value / 100) * sound.duration();
+        sound.seek(seekTime);
+      }
+    });
+
+    emojiContainer.addEventListener('click', () => {
+      currentEmojiIndex = (currentEmojiIndex + 1) % emojis.length;
+      emojiContainer.textContent = emojis[currentEmojiIndex];
+      emojiContainer.classList.add('spinning');
+      setTimeout(() => {
+        emojiContainer.classList.remove('spinning');
+      }, 1000);
+    });
+  </script>
+
+</body></html>
